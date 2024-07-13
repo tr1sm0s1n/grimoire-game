@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5jju2yvbbhea"]
+
+[ext_resource type="Script" path="res://scripts/spells.gd" id="1_ahvi1"]
+[ext_resource type="Texture2D" uid="uid://jqyrtitx85iw" path="res://assets/map/Collectable/Volcano Level Set_Collectable Object - Bubble.png" id="2_650el"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vaw7o"]
+radius = 17.1172
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_ahvi1")
+
+[node name="Spell1" type="Sprite2D" parent="."]
+position = Vector2(25, 7.10543e-15)
+scale = Vector2(0.3125, 0.3125)
+texture = ExtResource("2_650el")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(25, 0)
+shape = SubResource("CircleShape2D_vaw7o")
