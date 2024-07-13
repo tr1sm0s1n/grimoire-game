@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://c81opw28603jy"]
+[gd_scene load_steps=73 format=3 uid="uid://c81opw28603jy"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_f7dim"]
 [ext_resource type="Texture2D" uid="uid://u534q4kacl7n" path="res://assets/player/Idle Blinking/Idle Blinking_000.png" id="1_inq0n"]
@@ -300,6 +300,11 @@ animations = [{
 "speed": 24.0
 }]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5rsfc"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_f7dim")
 spell = ExtResource("2_o0gsj")
@@ -312,9 +317,9 @@ shape = SubResource("CapsuleShape2D_bhd5c")
 position = Vector2(-5, -55)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_xgtdk")
-animation = &"idle"
+animation = &"jump"
 autoplay = "idle"
-frame_progress = 0.971423
+frame_progress = 0.114387
 
 [node name="WandRotation" type="Node2D" parent="."]
 position = Vector2(3, -65)
@@ -326,3 +331,13 @@ texture = ExtResource("50_gmak6")
 
 [node name="SpellSpawn" type="Node2D" parent="WandRotation"]
 position = Vector2(137, 4)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-3, -72)
+zoom = Vector2(0.7, 0.7)
+limit_top = -1450
+limit_bottom = 65
+position_smoothing_enabled = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_5rsfc")

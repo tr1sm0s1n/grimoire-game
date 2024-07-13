@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="grimoire"
-run/main_scene="res://levels/level_01.tscn"
+run/main_scene="res://levels/menu/menu.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Lobby="*res://lobby.gd"
 
 [input]
 
