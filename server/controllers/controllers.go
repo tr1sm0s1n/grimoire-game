@@ -6,48 +6,48 @@ import (
 	"strings"
 
 	"github.com/DEMYSTIF/gin-postgres-api/models"
+	"github.com/DEMYSTIF/gin-postgres-api/services"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func CreateOne(c *gin.Context, db *gorm.DB) {
-	var user models.Player
-	if err := c.ShouldBindJSON(&user); err != nil {
+	player := new(models.Player)
+	if err := c.ShouldBindJSON(player); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
 		return
 	}
-	log.Println(user)
 	// check if entries have empty values
-	if strings.TrimSpace(user.UserName) == "" {
+	if strings.TrimSpace(player.UserName) == "" {
 		c.AbortWithStatusJSON(430, gin.H{"message": "Username is not allowed to be empty"})
 		return
 	}
-	if strings.TrimSpace(user.Password) == "" {
+	if strings.TrimSpace(player.Password) == "" {
 		c.AbortWithStatusJSON(430, gin.H{"message": "Password is not allowed to be empty"})
 		return
 	}
-	if strings.TrimSpace(user.Network) == "" {
+	if strings.TrimSpace(player.Network) == "" {
 		c.AbortWithStatusJSON(430, gin.H{"message": "Network is not allowed to be empty"})
 		return
 	}
-	if strings.TrimSpace(user.Address) == "" {
+	if strings.TrimSpace(player.Address) == "" {
 		c.AbortWithStatusJSON(430, gin.H{"message": "Address is not allowed to be empty"})
 		return
 	}
 	// Check if the network value is valid
-	if user.Network != "ethereum" && user.Network != "stellar" {
+	if player.Network != "ethereum" && player.Network != "stellar" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Network must be either 'ethereum' or 'stellar'"})
 		return
 	}
 
 	// Check address length for network
-	if user.Network == "ethereum" {
-		if len(user.Address) != 42 {
+	if player.Network == "ethereum" {
+		if len(player.Address) != 42 {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Length of 'ethereum' address should be 42"})
 			return
 		}
 	} else {
-		if len(user.Address) != 56 {
+		if len(player.Address) != 56 {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Length of 'stellar' address should be 56"})
 			return
 		}
@@ -57,16 +57,21 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
 		return
 	}
-	result := db.Create(&user)
+	result := db.Create(&player)
 	if result.Error != nil {
 		log.Println("Error occurred:", result.Error)
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
 		return
 	}
 
-	// Mint NFT for User
+	if player.Network == "ethereum" {
+		if err := services.IssueNFT(player); err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Unable to mint NFT"})
+			return
+		}
+	}
 
-	c.IndentedJSON(http.StatusCreated, user)
+	c.IndentedJSON(http.StatusCreated, player)
 }
 func VerifyLogin(c *gin.Context, db *gorm.DB) {
 	type LogInData struct {

@@ -6,11 +6,16 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: grimoire-server
+    environment:
+      - ETH_URL=${ETH_URL}
+      - ETH_ADDR=${ETH_ADDR}
+      - PRIVATE_KEY=${PRIVATE_KEY}
     links:
       - postgres
     ports:
       - 8080:8080
     entrypoint: './main'
+    
   postgres:
     image: postgres:15
     container_name: gin-postgres
