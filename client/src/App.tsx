@@ -74,7 +74,7 @@ function App() {
       if (!response.ok) {
         Swal.fire({
           title: "Registration Failure",
-          text: "Ready to battle!!",
+          text: "Try again later",
           icon: "error",
         });
       }
@@ -92,6 +92,12 @@ function App() {
           }).then((result) => {
             if (result.isConfirmed) {
               Swal.fire("Complete!", "", "success");
+              setFormData({
+                username: "",
+                password: "",
+                address: "",
+                network: "",
+              })
             }
           });
           break;
