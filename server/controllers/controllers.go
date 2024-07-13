@@ -11,11 +11,12 @@ import (
 )
 
 func CreateOne(c *gin.Context, db *gorm.DB) {
-	var user models.User
+	var user models.Player
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
 		return
 	}
+	log.Println(user)
 	// check if entries have empty values
 	if strings.TrimSpace(user.UserName) == "" {
 		c.AbortWithStatusJSON(430, gin.H{"message": "Username is not allowed to be empty"})
@@ -52,7 +53,7 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		}
 	}
 	// AutoMigrate will create the table if it doesn't exist
-	if err := db.AutoMigrate(&models.User{}); err != nil {
+	if err := db.AutoMigrate(&models.Player{}); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
 		return
 	}
@@ -72,7 +73,7 @@ func VerifyLogin(c *gin.Context, db *gorm.DB) {
 		UserName string `json:"userName"`
 		Password string `json:"password"`
 	}
-	var user models.User
+	var user models.Player
 	var loginData LogInData
 	if err := c.ShouldBindJSON(&loginData); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})

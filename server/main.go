@@ -16,7 +16,7 @@ func main() {
 		log.Fatal("Failed to connect the database")
 	}
 
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Player{})
 
 	router := gin.Default()
 	router.Static("/", "../dist")
