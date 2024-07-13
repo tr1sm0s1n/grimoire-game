@@ -24,12 +24,13 @@ func main() {
 	router.POST("/register", func(ctx *gin.Context) {
 		controllers.CreateOne(ctx, db)
 	})
-	// router.GET("/read", func(ctx *gin.Context) {
-	// 	controllers.ReadAll(ctx, db)
-	// })
-	router.GET("/read/:id", func(ctx *gin.Context) {
-		controllers.ReadOne(ctx, db)
+	router.POST("/login", func(ctx *gin.Context) {
+		controllers.VerifyLogin(ctx, db)
 	})
+
+	// router.GET("/read/:id", func(ctx *gin.Context) {
+	// 	controllers.ReadOne(ctx, db)
+	// })
 
 	// router.PUT("/update/:id", func(ctx *gin.Context) {
 	// 	controllers.UpdateOne(ctx, db)
