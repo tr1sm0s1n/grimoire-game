@@ -99,7 +99,18 @@ function App() {
             confirmButtonText: "Download",
           }).then((result) => {
             if (result.isConfirmed) {
-              Swal.fire("Complete!", "", "success");
+              Swal.fire({
+                title: "Download & Battle",
+                html: `
+                  <a href="your_windows_download_link" style="margin: 5px;"><button id="download-windows" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Windows</button></a>
+                  <a href="your_linux_download_link" style="margin: 5px;"><button id="download-linux" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Linux</button></a>
+                  <a href="your_mac_download_link" style="margin: 5px;"><button id="download-mac" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Mac</button></a>
+                `,
+                icon: "success",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+              })
               setFormData({
                 username: "",
                 password: "",
@@ -111,9 +122,17 @@ function App() {
           break;
         case 400:
           Swal.fire({
-            title: "Duplication Detected",
-            text: "Make sure the username & address are unique.",
+            title: "Duplicate detected",
+            html: `
+              <p>Account already exist against this credentials</p>
+              <a href="your_windows_download_link" style="margin: 5px;"><button id="download-windows" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Windows</button></a>
+              <a href="your_linux_download_link" style="margin: 5px;"><button id="download-linux" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Linux</button></a>
+              <a href="your_mac_download_link" style="margin: 5px;"><button id="download-mac" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Mac</button></a>
+            `,
             icon: "warning",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
           });
           break;
         case 430:
