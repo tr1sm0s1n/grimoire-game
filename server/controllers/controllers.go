@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/DEMYSTIF/gin-postgres-api/models"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,23 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
 		return
 	}
-
+	// check if entries have empty values
+	if strings.TrimSpace(user.UserName) == "" {
+		c.AbortWithStatusJSON(430, gin.H{"message": "Username is not allowed to be empty"})
+		return
+	}
+	if strings.TrimSpace(user.Password) == "" {
+		c.AbortWithStatusJSON(430, gin.H{"message": "Password is not allowed to be empty"})
+		return
+	}
+	if strings.TrimSpace(user.Network) == "" {
+		c.AbortWithStatusJSON(430, gin.H{"message": "Network is not allowed to be empty"})
+		return
+	}
+	if strings.TrimSpace(user.Address) == "" {
+		c.AbortWithStatusJSON(430, gin.H{"message": "Address is not allowed to be empty"})
+		return
+	}
 	// Check if the network value is valid
 	if user.Network != "ethereum" && user.Network != "stellar" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Network must be either 'ethereum' or 'stellar'"})
@@ -34,7 +51,11 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 			return
 		}
 	}
-
+	// AutoMigrate will create the table if it doesn't exist
+	if err := db.AutoMigrate(&models.User{}); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
+		return
+	}
 	result := db.Create(&user)
 	if result.Error != nil {
 		log.Println("Error occurred:", result.Error)
