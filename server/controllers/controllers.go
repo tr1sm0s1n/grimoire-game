@@ -47,12 +47,21 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 	c.IndentedJSON(http.StatusCreated, user)
 }
 func VerifyLogin(c *gin.Context, db *gorm.DB) {
+	type LogInData struct {
+		UserName string `json:"userName"`
+		Password string `json:"password"`
+	}
 	var user models.User
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	var loginData LogInData
+	if err := c.ShouldBindJSON(&loginData); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
+		return
+	}
+	username := loginData.UserName
+	password := loginData.Password
 
 	// Query database for user with given username
-	result := db.Where("username = ?", username).First(&user)
+	result := db.Where("user_name = ?", username).First(&user)
 	if result.Error != nil {
 		c.JSON(401, gin.H{"error": "User not found"})
 		return
