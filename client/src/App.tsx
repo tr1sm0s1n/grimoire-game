@@ -102,6 +102,13 @@ function App() {
             icon: "warning",
           });
           break;
+        case 430:
+          Swal.fire({
+            title: "Validation Error",
+            text: "Make sure fields are not empty.",
+            icon: "warning",
+          });
+          break;
         default:
           Swal.fire({
             title: "Unwarranted Response",
