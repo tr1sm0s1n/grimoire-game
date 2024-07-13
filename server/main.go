@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/DEMYSTIF/gin-postgres-api/src/controllers"
-	"github.com/DEMYSTIF/gin-postgres-api/src/db"
-	"github.com/DEMYSTIF/gin-postgres-api/src/middlewares"
-	"github.com/DEMYSTIF/gin-postgres-api/src/models"
+	"github.com/DEMYSTIF/gin-postgres-api/controllers"
+	"github.com/DEMYSTIF/gin-postgres-api/db"
+	"github.com/DEMYSTIF/gin-postgres-api/middlewares"
+	"github.com/DEMYSTIF/gin-postgres-api/models"
 	"github.com/gin-gonic/gin"
 )
 
