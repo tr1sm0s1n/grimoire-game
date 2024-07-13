@@ -61,7 +61,7 @@ function App() {
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      console.log(formData);
+      // console.log(formData);
       const response = await fetch("register", {
         method: "POST",
         headers: {
@@ -152,6 +152,7 @@ function App() {
                   id="username"
                   name="username"
                   type="text"
+                  maxLength={20}
                   required
                   value={formData.username}
                   onChange={handleChange}
