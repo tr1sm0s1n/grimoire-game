@@ -19,7 +19,7 @@ func main() {
 	db.AutoMigrate(&models.Player{})
 
 	router := gin.Default()
-	router.Static("/", "../dist")
+	router.Static("/", "./dist")
 	router.Use(middlewares.Authority())
 
 	router.POST("/register", func(ctx *gin.Context) {
@@ -28,6 +28,6 @@ func main() {
 	router.POST("/login", func(ctx *gin.Context) {
 		controllers.VerifyLogin(ctx, db)
 	})
-	
+
 	router.Run("0.0.0.0:8080")
 }
