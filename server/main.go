@@ -19,6 +19,7 @@ func main() {
 	db.AutoMigrate(&models.User{})
 
 	router := gin.Default()
+	router.Static("/", "../dist")
 	router.Use(middlewares.Authority())
 
 	router.POST("/register", func(ctx *gin.Context) {
