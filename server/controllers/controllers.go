@@ -21,6 +21,18 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Network must be either 'ethereum' or 'stellar'"})
 		return
 	}
+
+	// Check address length for network
+	if user.Network == "ethereum" {
+		if len(user.Address) != 42 {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Length of 'ethereum' address should be 42"})
+		}
+	} else {
+		if len(user.Address) != 56 {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Length of 'stellar' address should be 56"})
+		}
+	}
+
 	result := db.Create(&user)
 	if result.Error != nil {
 		log.Println("Error occurred:", result.Error)
