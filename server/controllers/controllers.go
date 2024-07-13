@@ -3,7 +3,6 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/DEMYSTIF/gin-postgres-api/models"
 	"github.com/gin-gonic/gin"
@@ -16,6 +15,7 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
 		return
 	}
+
 	// Check if the network value is valid
 	if user.Network != "ethereum" && user.Network != "stellar" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Network must be either 'ethereum' or 'stellar'"})
@@ -26,10 +26,12 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 	if user.Network == "ethereum" {
 		if len(user.Address) != 42 {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Length of 'ethereum' address should be 42"})
+			return
 		}
 	} else {
 		if len(user.Address) != 56 {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Length of 'stellar' address should be 56"})
+			return
 		}
 	}
 
@@ -39,6 +41,8 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
 		return
 	}
+
+	// Mint NFT for User
 
 	c.IndentedJSON(http.StatusCreated, user)
 }
@@ -54,23 +58,23 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 // 	c.IndentedJSON(http.StatusOK, certificates)
 // }
 
-func ReadOne(c *gin.Context, db *gorm.DB) {
-	var oldUser models.User
-	param := c.Param("id")
-	id, err := strconv.Atoi(param)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
-		return
-	}
+// func ReadOne(c *gin.Context, db *gorm.DB) {
+// 	var oldUser models.User
+// 	param := c.Param("id")
+// 	id, err := strconv.Atoi(param)
+// 	if err != nil {
+// 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
+// 		return
+// 	}
 
-	result := db.First(&oldUser, "id = ?", id)
-	if result.Error != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Not Found"})
-		return
-	}
+// 	result := db.First(&oldUser, "id = ?", id)
+// 	if result.Error != nil {
+// 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Not Found"})
+// 		return
+// 	}
 
-	c.IndentedJSON(http.StatusOK, oldUser)
-}
+// 	c.IndentedJSON(http.StatusOK, oldUser)
+// }
 
 // func UpdateOne(c *gin.Context, db *gorm.DB) {
 // 	var update models.Certificate
