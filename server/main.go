@@ -28,5 +28,6 @@ func main() {
 	router.POST("/login", func(ctx *gin.Context) {
 		controllers.VerifyLogin(ctx, db)
 	})
-	router.Run("localhost:8080")
+	
+	router.Run("0.0.0.0:8080")
 }
