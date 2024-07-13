@@ -16,7 +16,11 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Bad Request"})
 		return
 	}
-
+	// Check if the network value is valid
+	if user.Network != "ethereum" && user.Network != "stellar" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Network must be either 'ethereum' or 'stellar'"})
+		return
+	}
 	result := db.Create(&user)
 	if result.Error != nil {
 		log.Println("Error occurred:", result.Error)
