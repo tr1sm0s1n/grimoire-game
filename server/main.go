@@ -28,16 +28,5 @@ func main() {
 	router.POST("/login", func(ctx *gin.Context) {
 		controllers.VerifyLogin(ctx, db)
 	})
-
-	// router.GET("/read/:id", func(ctx *gin.Context) {
-	// 	controllers.ReadOne(ctx, db)
-	// })
-
-	// router.PUT("/update/:id", func(ctx *gin.Context) {
-	// 	controllers.UpdateOne(ctx, db)
-	// })
-	// router.DELETE("/delete/:id", func(ctx *gin.Context) {
-	// 	controllers.DeleteOne(ctx, db)
-	// })
 	router.Run("localhost:8080")
 }
