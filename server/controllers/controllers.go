@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -18,13 +19,13 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 
 	result := db.Create(&user)
 	if result.Error != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Duplicate Key"})
+		log.Println("Error occurred:", result.Error)
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusCreated, user)
 }
-
 
 // func ReadAll(c *gin.Context, db *gorm.DB) {
 // 	var certificates []models.Certificate
