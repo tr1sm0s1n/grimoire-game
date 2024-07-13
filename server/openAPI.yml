@@ -1,0 +1,266 @@
+openapi: "3.0.3"
+
+info:
+  title: Gin-Postgres-API - OpenAPI 3.0
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:8080
+    description: local
+
+paths:
+  /create:
+    post:
+      summary: creates a new certificate
+      operationId: createCertificate
+      description: Creates a new certificate in the database.
+      tags:
+        - create
+      responses:
+        "201":
+          description: Returns the new certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "400":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "401":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedResponse"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateResponse"
+        description: Certificate Details
+  /read:
+    get:
+      summary: reads all certificates
+      operationId: readAllCertificates
+      description: Reads all certificates in the database.
+      tags:
+        - read
+      responses:
+        "200":
+          description: Returns all the certificates.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CertificateResponse"
+        "401":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedResponse"
+        "500":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+  /read/{id}:
+    get:
+      summary: reads one certificate
+      operationId: readOneCertificate
+      description: Reads an existing certificate in the database.
+      tags:
+        - read
+      responses:
+        "200":
+          description: Returns one certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "400":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "401":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedResponse"
+        "404":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
+      parameters:
+        - name: id
+          description: Certificate ID
+          in: path
+          required: true
+          schema:
+            type: integer
+  /update/{id}:
+    put:
+      summary: updates a certificate
+      operationId: updateCertificate
+      description: Updates an existing certificate in the database.
+      tags:
+        - update
+      responses:
+        "200":
+          description: Returns the updated certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "400":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "401":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedResponse"
+        "404":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
+        "500":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+      parameters:
+        - name: id
+          description: Certificate ID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateResponse"
+        description: Certificate Details
+  /delete/{id}:
+    delete:
+      summary: deletes a certificate
+      operationId: deleteCertificate
+      description: Deletes an existing certificate in the database.
+      tags:
+        - delete
+      responses:
+        "200":
+          description: Returns the deleted certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "400":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "401":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedResponse"
+        "404":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
+        "500":
+          description: Returns a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+      parameters:
+        - name: id
+          description: Certificate ID
+          in: path
+          required: true
+          schema:
+            type: integer
+
+components:
+  schemas:
+    CertificateResponse:
+      type: object
+      required:
+        - id
+        - name
+        - course
+        - grade
+        - date
+      properties:
+        id:
+          type: integer
+          example: 81
+        name:
+          type: string
+          example: Raven
+        course:
+          type: string
+          example: MBCC
+        grade:
+          type: string
+          example: S
+        date:
+          type: string
+          format: date
+          example: "2023-10-01"
+    BadRequestResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Bad Request"
+    UnauthorizedResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Unauthorized"
+    NotFoundResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Not Found"
+    InternalServerErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Internal Server Error"
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+
+security:
+  - Bearer: []
