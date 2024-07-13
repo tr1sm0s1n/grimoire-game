@@ -3,6 +3,7 @@ import GLogo from "/G.svg";
 import { BrowserProvider } from "ethers";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -57,9 +58,16 @@ function App() {
       });
     }
   };
-
+  const MySwal = withReactContent(Swal);
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    MySwal.fire({
+      title: <p>Loading</p>,
+      didOpen: () => {
+        // `MySwal` is a subclass of `Swal` with all the same instance & static methods
+        MySwal.showLoading()
+      },
+    })
     try {
       // console.log(formData);
       const response = await fetch("register", {
@@ -70,7 +78,7 @@ function App() {
         },
         body: JSON.stringify(formData),
       });
-
+      MySwal.close(); 
       if (!response.ok) {
         Swal.fire({
           title: "Registration Failure",
