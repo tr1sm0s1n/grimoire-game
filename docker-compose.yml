@@ -1,6 +1,16 @@
-version: "3.8"
+version: '3.8'
 
 services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grimoire-server
+    links:
+      - postgres
+    ports:
+      - 8080:8080
+    entrypoint: './main'
   postgres:
     image: postgres:15
     container_name: gin-postgres

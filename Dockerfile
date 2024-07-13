@@ -25,5 +25,3 @@ FROM scratch
 COPY --from=go_build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=go_build /server /
 COPY --from=node_build /dist /
-
-CMD ./main
