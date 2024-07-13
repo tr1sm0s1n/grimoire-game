@@ -20,6 +20,15 @@ function App() {
   };
 
   const connectMetaMask = async () => {
+    if (typeof window.ethereum === 'undefined') {
+      Swal.fire({
+        title: "MetaMask is not installed",
+        text: "Please install MetaMask to use this feature.",
+        icon: "error",
+      });
+      return;
+    }
+    else {
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     setFormData({
@@ -27,10 +36,19 @@ function App() {
       address: signer.address,
       network: "ethereum",
     });
+  }
   };
 
   const connectFreighter = async () => {
-    if (await isConnected()) {
+    if (typeof window.ethereum === 'undefined') {
+      Swal.fire({
+        title: "Freighter wallet is not installed",
+        text: "Please install Freighter wallet to use this feature.",
+        icon: "error",
+      });
+      return;
+    }
+    else if (await isConnected()) {
       const publicKey = await requestAccess();
       setFormData({
         ...formData,
