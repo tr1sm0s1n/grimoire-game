@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-
 const SPEED = 500.0
 const JUMP_VELOCITY = -800.0
 
@@ -68,15 +67,13 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY
 	
 	if Input.is_action_just_pressed("Fire"):
-		var sp = spell.instantiate()  # Correctly instantiate the spell
-		sp.global_position = $WandRotation.get_node("SpellSpawn").global_position
-		sp.rotation_degrees = $WandRotation.rotation_degrees
-		get_parent().add_child(sp)
+		fire.rpc()
+
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction = Input.get_axis("run_left", "run_right")
 	
-		# Flip the sprite
+	# Flip the sprite
 	if direction > 0:
 		animated_sprite.flip_h = false
 	elif direction < 0:
@@ -88,3 +85,10 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
+	
+@rpc("any_peer", "call_local")
+func fire():
+	var sp = spell.instantiate()  # Correctly instantiate the spell
+	sp.global_position = $WandRotation.get_node("SpellSpawn").global_position
+	sp.rotation_degrees = $WandRotation.rotation_degrees
+	get_parent().add_child(sp)

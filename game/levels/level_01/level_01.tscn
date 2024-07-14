@@ -49,6 +49,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 52, -36, 39, -26, 37, 3, 23, 17, 12, 41, -10, 53, -45, 53, -64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5iq56"]
 texture = ExtResource("5_3neco")
@@ -84,6 +85,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -19, 64, -34, 33, -38, 20, -51, -4, -50, -34)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0sdk7"]
 texture = ExtResource("10_gi66e")
@@ -91,6 +93,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k7gaa"]
 texture = ExtResource("11_tsxbs")
@@ -98,6 +101,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_66dvk"]
 texture = ExtResource("12_jiyrl")
@@ -105,6 +109,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1lus5"]
 texture = ExtResource("13_3r4ql")
@@ -112,6 +117,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 57, -64, 51, -38, 49, -23, 46, 5, 34, 23, 29, 47, 19, 64, -64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t35o2"]
 texture = ExtResource("14_jniwo")
@@ -127,6 +133,7 @@ texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-58, -64, 64, -64, 64, 64, 47, 53, 22, 55, -4, 49, -25, 19, -35, 5, -40, -24, -50, -38)
 
 [sub_resource type="TileSet" id="TileSet_286f6"]
 tile_size = Vector2i(128, 128)
@@ -193,10 +200,10 @@ centered = false
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Players"]
 _spawnable_scenes = PackedStringArray("res://char/player.tscn")
 spawn_path = NodePath("../PlayersContainer")
-spawn_limit = 2
+spawn_limit = 4
 
 [node name="SpawnPoint_0" type="Node2D" parent="Players"]
-position = Vector2(-155, -41)
+position = Vector2(-1029, -1129)
 
 [node name="SpawnPoint_1" type="Node2D" parent="Players"]
-position = Vector2(-505, -57)
+position = Vector2(-819, -164)

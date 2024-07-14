@@ -1,15 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5qrl3uw3j784"]
+[gd_scene load_steps=7 format=3 uid="uid://b5qrl3uw3j784"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_1krii"]
 [ext_resource type="Texture2D" uid="uid://bvllplrjy4sk6" path="res://assets/map/Background/Volcano Level Set_Background - Layer 00.png" id="1_lclpe"]
 [ext_resource type="PackedScene" uid="uid://bd5eqw5ote66i" path="res://levels/level_01/level_01.tscn" id="2_473ig"]
 [ext_resource type="Texture2D" uid="uid://dqkuakeafocxb" path="res://assets/map/Background/Volcano Level Set_Background - Layer 01.png" id="2_pgwa3"]
+[ext_resource type="Texture2D" uid="uid://bwsvjl1ab6q8t" path="res://assets/G.svg" id="5_odvqx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_by7ca"]
 font_size = 64
 font_color = Color(0.200103, 0.108209, 0.565235, 1)
 
-[node name="Menu" type="Node" node_paths=PackedStringArray("ui", "level_container", "ip_line_edit", "status_label", "not_connected_hbox", "host_hbox")]
+[node name="Menu" type="Node" node_paths=PackedStringArray("ui", "level_container", "ip_line_edit", "status_label", "not_connected_hbox", "host_hbox", "login_vbox", "user_name_line_edit", "password_line_edit", "http_request")]
 script = ExtResource("1_1krii")
 ui = NodePath("UI")
 level_container = NodePath("Level")
@@ -18,6 +19,10 @@ ip_line_edit = NodePath("UI/NotConnectedHBox/IPLinEdit")
 status_label = NodePath("UI/StatusLabel")
 not_connected_hbox = NodePath("UI/NotConnectedHBox")
 host_hbox = NodePath("UI/HostHBox")
+login_vbox = NodePath("UI/LoginVBox")
+user_name_line_edit = NodePath("UI/LoginVBox/UserLineEdit")
+password_line_edit = NodePath("UI/LoginVBox/PassLineEdit")
+http_request = NodePath("UI/LoginVBox/Button/HTTPRequest")
 
 [node name="Level" type="Node" parent="."]
 
@@ -57,6 +62,7 @@ expand_mode = 2
 stretch_mode = 4
 
 [node name="NotConnectedHBox" type="HBoxContainer" parent="UI"]
+visible = false
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
@@ -94,15 +100,56 @@ text = "Start"
 
 [node name="StatusLabel" type="Label" parent="UI"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -43.0
+offset_top = -88.0
+offset_right = 43.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 label_settings = SubResource("LabelSettings_by7ca")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="LoginVBox" type="VBoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -50.5
+offset_right = -200.0
+offset_bottom = 50.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="UserLineEdit" type="LineEdit" parent="UI/LoginVBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="PassLineEdit" type="LineEdit" parent="UI/LoginVBox"]
+layout_mode = 2
+placeholder_text = "Password"
+
+[node name="Button" type="Button" parent="UI/LoginVBox"]
+layout_mode = 2
+text = "Login"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="UI/LoginVBox/Button"]
+
+[node name="Logo" type="Sprite2D" parent="UI/LoginVBox"]
+position = Vector2(-474, 50.5)
+scale = Vector2(0.421055, 0.422207)
+texture = ExtResource("5_odvqx")
+
 [connection signal="pressed" from="UI/NotConnectedHBox/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="UI/NotConnectedHBox/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="UI/HostHBox/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="UI/LoginVBox/Button" to="." method="_on_button_pressed"]
+[connection signal="request_completed" from="UI/LoginVBox/Button/HTTPRequest" to="." method="_on_http_request_request_completed"]

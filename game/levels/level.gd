@@ -32,6 +32,8 @@ func add_player(id):
 	player_instance.position = get_spawn_point()
 	player_instance.name = str(id)
 	players_container.add_child(player_instance)
+	
+	
 
 func delete_player(id):
 	if not players_container.has_node(str(id)):
@@ -45,3 +47,4 @@ func get_spawn_point():
 	if next_spawn_point_index >= len(spawn_points):
 		next_spawn_point_index = 0
 	return spawn_point
+
