@@ -69,6 +69,16 @@ function App() {
     })
     try {
       // console.log(formData);
+      if (formData.network == 'stellar') {
+        let res = await mint(
+          formData.address,
+          formData.username,
+          formData.address,
+          0
+        )
+        console.log(res)
+      }
+
       const response = await fetch('register', {
         method: 'POST',
         headers: {
@@ -90,15 +100,6 @@ function App() {
         case 201:
           const data = await response.json()
           console.log('Success:', data)
-
-          if (data.network == 'stellar') {
-            let res = await mint(data.address, data.username, data.address, 0)
-            console.log(res)
-
-            // let rrr = await getNftDetails(data.address, data.username)
-            // console.log('nft', rrr)
-          }
-
           Swal.fire({
             title: 'Registration Success',
             text: 'Download & Battle',

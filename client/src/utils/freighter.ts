@@ -12,7 +12,7 @@ export const userSignTransaction = async (
     signedTransaction = await signTransaction(xdr, {
       network,
       accountToSign: signWith,
-    })
+    })    
   } catch (e: any) {
     error = e
   }

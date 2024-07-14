@@ -63,7 +63,7 @@ async function contractInt(
   let prepareTx = _buildTx.toXDR() // pre-encoding (converting it to XDR format)
 
   let signedTx = await userSignTransaction(prepareTx, 'TESTNET', caller)
-
+  
   let tx = TransactionBuilder.fromXDR(signedTx, Networks.TESTNET)
 
   try {
@@ -104,7 +104,7 @@ async function mint(caller: string, id: string, addr: string, score: number) {
     return res
   } catch (error) {
     console.log(error)
-    return error
+    throw new Error("error: cannot mint");
   }
 }
 
@@ -114,7 +114,7 @@ async function getNftDetails(caller: string, id: string) {
   try {
     let result = await contractInt(caller, 'get_nft_details', values)
     console.log(result)
-    return result;
+    return result
   } catch (error) {
     console.log('Unable to fetch Your Pass Status!!')
   }
