@@ -1,66 +1,65 @@
-import { ChangeEvent, useState } from "react";
-import GLogo from "/G.svg";
-import { BrowserProvider } from "ethers";
-import { isConnected, requestAccess } from "@stellar/freighter-api";
-import Swal from "sweetalert2";
-import withReactContent from 'sweetalert2-react-content';
+import { ChangeEvent, useState } from 'react'
+import GLogo from '/G.svg'
+import { BrowserProvider } from 'ethers'
+import { isConnected, requestAccess } from '@stellar/freighter-api'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { mint } from './utils/stellar'
 
 function App() {
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    address: "",
-    network: "",
-  });
+    username: '',
+    password: '',
+    address: '',
+    network: '',
+  })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
   const connectMetaMask = async () => {
     if (typeof window.ethereum === 'undefined') {
       Swal.fire({
-        title: "MetaMask is not installed",
-        text: "Please install MetaMask to use this feature.",
-        icon: "error",
-      });
-      return;
+        title: 'MetaMask is not installed',
+        text: 'Please install MetaMask to use this feature.',
+        icon: 'error',
+      })
+      return
+    } else {
+      const provider = new BrowserProvider(window.ethereum)
+      const signer = await provider.getSigner()
+      setFormData({
+        ...formData,
+        address: signer.address,
+        network: 'ethereum',
+      })
     }
-    else {
-    const provider = new BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    setFormData({
-      ...formData,
-      address: signer.address,
-      network: "ethereum",
-    });
   }
-  };
 
   const connectFreighter = async () => {
     if (typeof window.ethereum === 'undefined') {
       Swal.fire({
-        title: "Freighter wallet is not installed",
-        text: "Please install Freighter wallet to use this feature.",
-        icon: "error",
-      });
-      return;
-    }
-    else if (await isConnected()) {
-      const publicKey = await requestAccess();
+        title: 'Freighter wallet is not installed',
+        text: 'Please install Freighter wallet to use this feature.',
+        icon: 'error',
+      })
+      return
+    } else if (await isConnected()) {
+      const publicKey = await requestAccess()
       setFormData({
         ...formData,
         address: publicKey,
-        network: "stellar",
-      });
+        network: 'stellar',
+      })
     }
-  };
-  const MySwal = withReactContent(Swal);
+  }
+  const MySwal = withReactContent(Swal)
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     MySwal.fire({
       title: <p>Loading</p>,
       didOpen: () => {
@@ -70,95 +69,104 @@ function App() {
     })
     try {
       // console.log(formData);
-      const response = await fetch("register", {
-        method: "POST",
+      const response = await fetch('register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer token",
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer token',
         },
         body: JSON.stringify(formData),
-      });
-      MySwal.close(); 
+      })
+      MySwal.close()
       if (!response.ok) {
         Swal.fire({
-          title: "Registration Failure",
-          text: "Try again later",
-          icon: "error",
-        });
+          title: 'Registration Failure',
+          text: 'Try again later',
+          icon: 'error',
+        })
       }
 
       switch (response.status) {
         case 201:
-          const data = await response.json();
-          console.log("Success:", data);
+          const data = await response.json()
+          console.log('Success:', data)
+
+          if (data.network == 'stellar') {
+            let res = await mint(data.address, data.username, data.address, 0)
+            console.log(res)
+
+            // let rrr = await getNftDetails(data.address, data.username)
+            // console.log('nft', rrr)
+          }
+
           Swal.fire({
-            title: "Registration Success",
-            text: "Download & Battle",
+            title: 'Registration Success',
+            text: 'Download & Battle',
             showConfirmButton: true,
-            icon: "success",
-            confirmButtonText: "Download",
+            icon: 'success',
+            confirmButtonText: 'Download',
           }).then((result) => {
             if (result.isConfirmed) {
               Swal.fire({
-                title: "Download & Battle",
+                title: 'Download & Battle',
                 html: `
                   <a href="your_windows_download_link" style="margin: 5px;"><button id="download-windows" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Windows</button></a>
                   <a href="your_linux_download_link" style="margin: 5px;"><button id="download-linux" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Linux</button></a>
                   <a href="your_mac_download_link" style="margin: 5px;"><button id="download-mac" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Mac</button></a>
                 `,
-                icon: "success",
+                icon: 'success',
                 showConfirmButton: false,
                 allowOutsideClick: false,
                 allowEscapeKey: false,
               })
               setFormData({
-                username: "",
-                password: "",
-                address: "",
-                network: "",
+                username: '',
+                password: '',
+                address: '',
+                network: '',
               })
             }
-          });
-          break;
+          })
+          break
         case 400:
           Swal.fire({
-            title: "Duplicate detected",
+            title: 'Duplicate detected',
             html: `
               <p>Account already exist against this credentials</p>
               <a href="your_windows_download_link" style="margin: 5px;"><button id="download-windows" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Windows</button></a>
               <a href="your_linux_download_link" style="margin: 5px;"><button id="download-linux" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Linux</button></a>
               <a href="your_mac_download_link" style="margin: 5px;"><button id="download-mac" class="swal2-confirm swal2-styled" style="margin: 5px;">Download for Mac</button></a>
             `,
-            icon: "warning",
+            icon: 'warning',
             showConfirmButton: false,
             allowOutsideClick: false,
             allowEscapeKey: false,
-          });
-          break;
+          })
+          break
         case 430:
           Swal.fire({
-            title: "Validation Error",
-            text: "Make sure fields are not empty.",
-            icon: "warning",
-          });
-          break;
+            title: 'Validation Error',
+            text: 'Make sure fields are not empty.',
+            icon: 'warning',
+          })
+          break
         default:
           Swal.fire({
-            title: "Unwarranted Response",
-            text: "Unable to process.",
-            icon: "error",
-          });
-          break;
+            title: 'Unwarranted Response',
+            text: 'Unable to process.',
+            icon: 'error',
+          })
+          break
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error)
       Swal.fire({
-        title: "Registration Failure",
-        text: "Kindly try again.",
-        icon: "error",
-      });
+        title: 'Registration Failure',
+        text: 'Kindly try again.',
+        icon: 'error',
+      })
     }
-  };
+  }
 
   return (
     <>
@@ -261,7 +269,7 @@ function App() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
