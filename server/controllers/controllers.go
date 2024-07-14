@@ -8,6 +8,7 @@ import (
 	"github.com/DEMYSTIF/gin-postgres-api/models"
 	"github.com/DEMYSTIF/gin-postgres-api/services"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -57,7 +58,16 @@ func CreateOne(c *gin.Context, db *gorm.DB) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
 		return
 	}
-	result := db.Create(&player)
+
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(player.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
+		return
+	}
+
+	player.Password = string(passwordHash)
+
+	result := db.Create(player)
 	if result.Error != nil {
 		log.Println("Error occurred:", result.Error)
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
@@ -95,7 +105,7 @@ func VerifyLogin(c *gin.Context, db *gorm.DB) {
 	}
 
 	// Verify password
-	if user.Password != password {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		c.JSON(401, gin.H{"error": "Invalid password"})
 		return
 	}
